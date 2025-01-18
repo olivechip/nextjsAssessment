@@ -8,21 +8,20 @@ export default async function BlogDetail({ params }) {
     const post = await fetchPostById(id);
 
     return (
-        <div>
+        <div className="wrapper">
             <div className="content">
                 <div className="header">
                     <h1>{post.title}</h1>
                     <p>submitted by user {post.userId}</p>
                 </div>
 
-                <main class="main">
+                <main className="main">
                     <p>{post.body}</p>
                 </main>
 
-
-            </div>
-            <div className="back-link">
-                <Link href="/">back</Link>
+                <div className="back-link">
+                    <Link href="/"></Link>
+                </div>
             </div>
         </div>
     );
