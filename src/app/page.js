@@ -7,14 +7,18 @@ import { BlogPost } from "./BlogPost";
 import styles from "./page.module.css";
 
 export default function Home() {
+  const [allPosts, setAllPosts] = useState([]);
   const [posts, setPosts] = useState([]);
+  const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // initial render of all posts
   useEffect(() => {
     async function fetchData() {
       try {
         const posts = await fetchPosts();
+        setAllPosts(posts);
         setPosts(posts);
       } catch (err) {
         setError(err.message);
@@ -26,6 +30,32 @@ export default function Home() {
     fetchData();
   }, []);
 
+  // update search term state
+  const handleSearch = (e) => {
+    setSearch(e.target.value);
+  };
+
+  // filters the posts by search term state
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (search) {
+      const filteredPosts = allPosts.filter((post) =>
+        post.title.toLowerCase().includes(search.toLowerCase())
+      );
+      setPosts(filteredPosts);
+    }
+
+    setSearch("");
+  };
+
+  // resets everything
+  const handleReset = () => {
+    setSearch("");
+    setPosts(allPosts);
+  };
+
+  // sanity check
   // console.log(posts);
 
   if (loading) return <p>Loading...</p>;
@@ -33,15 +63,35 @@ export default function Home() {
 
   return (
     <div className={styles.page}>
-      <h1>Blog Posts</h1>
+      <div className="header">
+        <h1>Blog Posts</h1>
+      </div>
+
+      <div>
+        <form onSubmit={handleSubmit}>
+
+          <input
+            id="search"
+            placeholder="search by title..."
+            value={search}
+            onChange={handleSearch}>
+          </input>
+
+          <div className={styles.searchButtons}>
+            <button className={styles.searchButton} type="submit">Search</button>
+            <button className={styles.resetButton} onClick={handleReset}>Reset</button>
+          </div>
+
+        </form>
+      </div>
+
+
       {posts.length > 0 ? (
         posts.map((post) => (
-          <div key={post.id} className={styles.content}>
-            <BlogPost post={post} />
-          </div>
+          <BlogPost key={post.id} post={post} />
         ))
       ) : (
-        <p>No posts available.</p>
+        <p>No matching posts found.</p>
       )}
     </div>
   );
