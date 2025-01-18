@@ -1,3 +1,16 @@
+.content {
+  width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+  font-size: 1.1em;
+}
+
+.content:not(:last-child) {
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 20px;
+}
+
+/* everything below this was from NextJS */
 .page {
   --gray-rgb: 0, 0, 0;
   --gray-alpha-200: rgba(var(--gray-rgb), 0.08);

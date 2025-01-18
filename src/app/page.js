@@ -6,12 +6,14 @@ import styles from "./page.module.css";
 export default async function Home() {
   const posts = await fetchPosts();
 
+  // check
   console.log(posts);
-  console.log(posts.length);
+
   return (
     <div className={styles.page}>
+      <h1>Blog Posts</h1>
       {posts.map((post) => (
-        <div key={post.id}>
+        <div key={post.id} className={styles.content}>
           <BlogPost key={post.id} post={post} />
         </div>
       ))}
